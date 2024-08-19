@@ -3,7 +3,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const helmet = require("helmet");
 const Config = require("./config");
-const routes = require("./routes");
+const Routes = require("./routes");
 const useragent = require('express-useragent');
 const { sequelize } = require('./helpers/sql/associations');
 
@@ -29,7 +29,9 @@ app.use(bodyParser.json());
 
 app.use(helmet());
 
-app.use('/', routes);
+
+Routes(app);
+
 
 app.listen(Config.PORT, (err) => {
   if (err) {
