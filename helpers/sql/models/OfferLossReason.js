@@ -18,7 +18,7 @@ module.exports = (sequelize) => {
   }, {
     sequelize,
     modelName: 'OfferLossReason',
-    tableName: 'offer_loss_reason'
+    tableName: 'offer_loss_reasons'
   });
 
   return OfferLossReason;
