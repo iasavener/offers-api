@@ -8,10 +8,10 @@ const VERSION = packageJson.version;
 
 const OffersController = require('../entities/offers/OffersController');
 
-router.post('/', AuthMiddleware, OffersController.createOffer);
-router.get('/', AuthMiddleware, OffersController.getOffers);
+router.post('/offers', AuthMiddleware, OffersController.createOffer);
+router.get('/offers', AuthMiddleware, OffersController.getOffers);
 router.get('/requests', AuthMiddleware, OffersController.getRequests);
-router.patch('/:offerId', AuthMiddleware, OffersController.updateOffer);
+router.patch('/offers/:offerId', AuthMiddleware, OffersController.updateOffer);
 router.post('/requests/:requestId/accept', AuthMiddleware, OffersController.acceptRequest);
 router.post('/requests/:requestId/reject', AuthMiddleware, OffersController.rejectRequest);
 
