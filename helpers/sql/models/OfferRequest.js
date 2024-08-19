@@ -11,7 +11,7 @@ module.exports = (sequelize) => {
       allowNull: false
     },
     offer_id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull: false
     },
     current_stage: {

@@ -44,8 +44,7 @@ module.exports = (sequelize) => {
         type: DataTypes.DATE
     },
     stage: {
-      type: DataTypes.INTEGER,
-      defaultValue: 1
+      type: DataTypes.INTEGER
     },
     loss_reason: {
       type: DataTypes.INTEGER
