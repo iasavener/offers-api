@@ -37,6 +37,8 @@ const Country = require('./models/Country')(sequelize);
 const Language = require('./models/Language')(sequelize);
 const ClientSector = require('./models/ClientSector')(sequelize);
 const ProviderSector = require('./models/ProviderSector')(sequelize);
+const New = require('./models/New')(sequelize);
+const NewMessage = require('./models/NewMessage')(sequelize);
 const Offer = require('./models/Offer')(sequelize);
 const OfferRequest = require('./models/OfferRequest')(sequelize);
 const OfferLossReason = require('./models/OfferLossReason')(sequelize);
@@ -111,6 +113,7 @@ Employee.belongsToMany(Project, { through: ProjectEmployee, foreignKey: 'employe
 
 ProjectEmployee.belongsTo(Project, { foreignKey: 'project_id' });
 ProjectEmployee.belongsTo(Employee, { foreignKey: 'employee_id' });
+
 
 Document.belongsToMany(Employee, { through: DocumentEmployee, foreignKey: 'document_id', otherKey: 'employee_id', as: 'employees' });
 Employee.belongsToMany(Document, { through: DocumentEmployee, foreignKey: 'employee_id', otherKey: 'document_id', as: 'documents' });
@@ -191,6 +194,13 @@ Provider.belongsTo(Country, { foreignKey: 'country' });
 ClientContact.belongsTo(Language, { foreignKey: 'language' });
 ProviderContact.belongsTo(Language, { foreignKey: 'language' });
 
+New.belongsTo(Employee, { foreignKey: 'created_by', as: 'creator' });
+New.belongsTo(Employee, { foreignKey: 'updated_by', as: 'editor' });
+New.belongsTo(Employee, { foreignKey: 'published_by', as: 'publisher' });
+
+NewMessage.belongsTo(Employee, { foreignKey: 'employee_id', as: 'emisor' });
+NewMessage.belongsTo(New, {foreignKey: 'new_id'});
+
 Offer.belongsTo(Employee, { foreignKey: 'created_by', as: 'creator' });
 Offer.belongsTo(Employee, { foreignKey: 'updated_by', as: 'editor' });
 Offer.belongsTo(Client, { foreignKey: 'client_id', as: 'client' });
@@ -203,7 +213,6 @@ OfferRequest.belongsTo(OfferStage, { foreignKey: 'next_stage' });
 OfferRequest.belongsTo(Employee, { foreignKey: 'created_by', as: 'creator' });
 OfferRequest.belongsTo(Employee, { foreignKey: 'accepted_by', as: 'supervisor' });
 OfferRequest.belongsTo(Offer, { foreignKey: 'offer_id', as: 'offer' });
-
 
 module.exports = {
     sequelize,
@@ -247,6 +256,8 @@ module.exports = {
     Language,
     ClientSector,
     ProviderSector,
+    New,
+    NewMessage,
     Offer,
     OfferRequest,
     OfferLossReason,
