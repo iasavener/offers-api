@@ -286,59 +286,6 @@ Client.hasMany(Offer, { foreignKey: 'client_id', as: 'offers' });
 Offer.belongsTo(OfferStage, { foreignKey: 'stage_id', as: 'stage' });
 Offer.belongsTo(OfferStage, { foreignKey: 'origin_stage_id', as: 'origin_stage' });
 Offer.belongsTo(OfferLossReason, { foreignKey: 'loss_reason' });
-
-
-GeneralConversation.belongsTo(Employee, { foreignKey: 'created_by', as: 'creator' });
-
-GeneralConversationMessage.belongsTo(Employee, { foreignKey: 'employee_id', as: 'emisor' });
-GeneralConversationMessage.belongsTo(GeneralConversation, {foreignKey: 'general_conversation_id'});
-
-SupportTicket.belongsTo(Employee, { foreignKey: 'created_by', as: 'creator' });
-SupportTicket.belongsTo(SupportArea, { foreignKey: 'support_area', as: 'area' });
-
-WorkTool.belongsTo(Employee, { foreignKey: 'created_by', as: 'creator' });
-WorkTool.belongsTo(Employee, { foreignKey: 'updated_by', as: 'editor' });
-
-TypeExpenseNote.belongsTo(Employee, { foreignKey: 'created_by', as: 'creator' });
-TypeExpenseNote.belongsTo(Employee, { foreignKey: 'updated_by', as: 'editor' });
-
-TypeVacation.belongsTo(Employee, { foreignKey: 'created_by', as: 'creator' });
-TypeVacation.belongsTo(Employee, { foreignKey: 'updated_by', as: 'editor' });
-
-TypePaidLeave.belongsTo(Employee, { foreignKey: 'created_by', as: 'creator' });
-TypePaidLeave.belongsTo(Employee, { foreignKey: 'updated_by', as: 'editor' });
-
-SavertecaRequest.belongsTo(Employee, { foreignKey: 'employee_id', as: 'creator' });
-
-PurchaseType.belongsTo(Employee, { foreignKey: 'created_by', as: 'creator' });
-PurchaseType.belongsTo(Employee, { foreignKey: 'updated_by', as: 'editor' });
-
-SoftwareInstallationRequest.belongsTo(Employee, { foreignKey: 'employee_id', as: 'creator' });
-SoftwareInstallationRequest.belongsTo(Department, { foreignKey: 'department_id', as: 'department' });
-
-
-WorkToolRequest.belongsTo(Employee, { foreignKey: 'employee_id', as: 'creator' });
-WorkToolRequest.belongsTo(WorkTool, { foreignKey: 'work_tool_id', as: 'work_tool' });
-WorkToolRequest.belongsTo(Project, { foreignKey: 'project_id', as: 'project' });
-
-
-ExpenseNotesRequest.belongsTo(Employee, { foreignKey: 'employee_id', as: 'creator' });
-ExpenseNotesRequest.belongsTo(Project, { foreignKey: 'project_id', as: 'project' });
-ExpenseNotesRequest.belongsTo(Offer, { foreignKey: 'offer_id', as: 'offer' });
-ExpenseNotesRequest.hasMany(ExpenseNotesRequestAttachment, {
-    foreignKey: 'expense_note_request_id',
-    as: 'attachments'
-});
-ExpenseNotesRequestAttachment.belongsTo(ExpenseNotesRequest, {
-    foreignKey: 'expense_note_request_id'
-});
-ExpenseNotesRequest.belongsToMany(TypeExpenseNote, { through: ExpenseNotesRequestType, foreignKey: 'expense_note_request_id', otherKey: 'expense_type_id', as: 'expense_types' });
-TypeExpenseNote.belongsToMany(ExpenseNotesRequest, { through: ExpenseNotesRequestType, foreignKey: 'expense_type_id', otherKey: 'expense_note_request_id', as: 'expense_note_requests' });
-
-WorkToolReturnRequest.belongsTo(WorkToolRequest, { foreignKey: 'work_tool_request_id', as: 'work_tool_request' });
-
-CvRequest.belongsTo(Employee, { foreignKey: 'employee_id', as: 'employee' });
-Employee.hasMany(CvRequest, { foreignKey: 'employee_id', as: 'cv_templates' });
 OfferEmployee.belongsTo(Offer, { foreignKey: 'offer_id' });
 OfferEmployee.belongsTo(Employee, { foreignKey: 'employee_id' });
 
