@@ -7,6 +7,19 @@ module.exports = (sequelize) => {
     id: {
       type: DataTypes.STRING,
       primaryKey: true,
+      allowNull: false,
+    },
+    original_id: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true
+    },
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: false
+    },
+    original_description: {
+      type: DataTypes.TEXT,
       allowNull: false
     },
     name: {
@@ -17,19 +30,11 @@ module.exports = (sequelize) => {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    created_by: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    updated_by: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    probability: {
+    amount: {
         type: DataTypes.INTEGER,
         allowNull: false
     },
-    amount: {
+    probability: {
         type: DataTypes.INTEGER,
         allowNull: false
     },
@@ -47,11 +52,37 @@ module.exports = (sequelize) => {
     follow_up_date: {
         type: DataTypes.DATE
     },
-    stage: {
-      type: DataTypes.INTEGER
-    },
     loss_reason: {
       type: DataTypes.INTEGER
+    },
+    revisions: {
+      type: DataTypes.INTEGER
+    },
+    technician: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
+    stage_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    origin_stage_id: {
+      type: DataTypes.INTEGER
+    },
+    created_by: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    updated_by: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    deleted_by: {
+      type: DataTypes.INTEGER,
+    },
+    deleted: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
     }
   }, {
     sequelize,

@@ -1,4 +1,5 @@
 const paginate = async (model, options) => {
+
     const limit = options.limit || 10;
     const offset = options.offset || 0;
     const count = await model.count({     where: { ...options.where }});
