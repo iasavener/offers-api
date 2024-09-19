@@ -48,13 +48,13 @@ module.exports = (sequelize) => {
     follow_up_date: {
         type: DataTypes.DATE
     },
-    loss_reason: {
+    loss_reason_id: {
       type: DataTypes.INTEGER
     },
     revisions: {
       type: DataTypes.INTEGER
     },
-    technician: {
+    technician_id: {
       type: DataTypes.INTEGER,
       allowNull: true
     },
@@ -79,6 +79,9 @@ module.exports = (sequelize) => {
     deleted: {
       type: DataTypes.BOOLEAN,
       defaultValue: false
+    },
+    competitor: {
+      type: DataTypes.TEXT
     }
   }, {
     sequelize,

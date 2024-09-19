@@ -27,13 +27,37 @@ const OffersController = {
         return ResponseHelper.getResponse(res, OffersService.deleteOffer, [res.locals.employee, req.params.offerId]);
     },
 
-    updateOffer: async (req, res) => {
-        return ResponseHelper.getResponse(res, OffersService.updateOffer, [res.locals.employee, req.body]);
+    assignTechnician: async (req, res) => {
+        return ResponseHelper.getResponse(res, OffersService.assignTechnician, [res.locals.employee, req.params.offerId, req.body, req.headers['authorization']]);
     },
 
     assignEmployee: async (req, res) => {
         return ResponseHelper.getResponse(res, OffersService.assignEmployee, [res.locals.employee, req.params.offerId, req.body, req.headers['authorization']]);
     },
+
+    markOfferAsLost: async (req, res) => {
+        return ResponseHelper.getResponse(res, OffersService.markOfferAsLost, [res.locals.employee, req.params.offerId, req.body]);
+    },
+
+    updateOffer: async (req, res) => {
+        return ResponseHelper.getResponse(res, OffersService.updateOffer, [res.locals.employee, req.params.offerId, req.body]);
+    },
+
+    assignEmployees: async (req, res) => {
+        return ResponseHelper.getResponse(res, OffersService.assignEmployees, [res.locals.employee, req.params.offerId, req.body]);
+    },
+
+    deleteEmployee: async (req, res) => {
+        return ResponseHelper.getResponse(res, OffersService.deleteEmployee, [res.locals.employee, req.params.offerId, req.params.employeeId]);
+    },
+
+    enableEmployee: async (req, res) => {
+        return ResponseHelper.getResponse(res, OffersService.enableEmployee, [res.locals.employee, req.params.offerId, req.params.employeeId]);
+    },
+
+    disableEmployee: async (req, res) => {
+        return ResponseHelper.getResponse(res, OffersService.disableEmployee, [res.locals.employee, req.params.offerId, req.params.employeeId]);
+    }
 
 };
 

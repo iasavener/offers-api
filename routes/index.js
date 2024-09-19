@@ -38,10 +38,52 @@ router.post("/opportunities",
     await OffersController.createOpportunity(req, res)
 });
 
+router.post("/offers/:offerId/lost",
+  AuthMiddleware,
+  async (req, res)=> {
+    await OffersController.markOfferAsLost(req, res)
+});
+
+router.post("/offers/:offerId/technician",
+  AuthMiddleware,
+  async (req, res)=> {
+    await OffersController.assignTechnician(req, res)
+});
+
+router.post("/offers/:offerId/employees",
+  AuthMiddleware,
+  async (req, res)=> {
+    await OffersController.assignEmployees(req, res)
+});
+
+router.delete("/offers/:offerId/employees/:employeeId",
+  AuthMiddleware,
+  async (req, res)=> {
+    await OffersController.deleteEmployee(req, res)
+});
+
+router.post("/offers/:offerId/employees/:employeeId/enable",
+  AuthMiddleware,
+  async (req, res)=> {
+    await OffersController.enableEmployee(req, res)
+});
+
+router.post("/offers/:offerId/employees/:employeeId/disable",
+  AuthMiddleware,
+  async (req, res)=> {
+    await OffersController.disableEmployee(req, res)
+});
+
 router.delete("/offers/:offerId",
   AuthMiddleware,
   async (req, res)=> {
     await OffersController.deleteOffer(req, res)
+});
+
+router.patch("/offers/:offerId",
+  AuthMiddleware,
+  async (req, res)=> {
+    await OffersController.updateOffer(req, res)
 });
 
 router.get("/status", function status(req, res) {

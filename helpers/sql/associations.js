@@ -281,13 +281,17 @@ Employee.belongsToMany(Offer, { through: OfferEmployee, foreignKey: 'employee_id
 Offer.belongsTo(Employee, { foreignKey: 'created_by', as: 'creator' });
 Offer.belongsTo(Employee, { foreignKey: 'updated_by', as: 'editor' });
 Offer.belongsTo(Employee, { foreignKey: 'deleted_by', as: 'remover' });
+Offer.belongsTo(Employee, { foreignKey: 'technician_id', as: 'technician' });
 Offer.belongsTo(Client, { foreignKey: 'client_id', as: 'client' });
 Client.hasMany(Offer, { foreignKey: 'client_id', as: 'offers' });
 Offer.belongsTo(OfferStage, { foreignKey: 'stage_id', as: 'stage' });
 Offer.belongsTo(OfferStage, { foreignKey: 'origin_stage_id', as: 'origin_stage' });
-Offer.belongsTo(OfferLossReason, { foreignKey: 'loss_reason' });
+Offer.belongsTo(OfferLossReason, { foreignKey: 'loss_reason_id', as: 'loss_reason' });
 OfferEmployee.belongsTo(Offer, { foreignKey: 'offer_id' });
-OfferEmployee.belongsTo(Employee, { foreignKey: 'employee_id' });
+OfferEmployee.belongsTo(Employee, { foreignKey: 'employee_id', as: 'employee' });
+OfferEmployee.belongsTo(Employee, { foreignKey: 'deleted_by', as: 'remover' });
+OfferEmployee.belongsTo(Employee, { foreignKey: 'created_by', as: 'creator' });
+OfferEmployee.belongsTo(Employee, { foreignKey: 'updated_by', as: 'editor' });
 
 module.exports = {
     sequelize,
