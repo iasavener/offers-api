@@ -32,6 +32,13 @@ router.get("/offers",
     await OffersController.getOffers(req, res)
 });
 
+router.get("/offers/minified",
+  AuthMiddleware,
+  async (req, res) => {
+    await OffersController.getMinifiedOffers(req, res)
+  }
+);
+
 router.post("/opportunities",
   AuthMiddleware,
   async (req, res)=> {

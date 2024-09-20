@@ -15,6 +15,10 @@ const OffersController = {
         return ResponseHelper.getResponse(res, OffersService.getOffers, [res.locals.employee]);
     },
 
+    getMinifiedOffers: async (req, res) => {
+        return ResponseHelper.getResponse(res, OffersService.getMinifiedOffers, []);
+    },
+
     getOpportunities: async (req, res) => {
         return ResponseHelper.getResponse(res, OffersService.getOpportunities, [res.locals.employee, req.query]);
     },

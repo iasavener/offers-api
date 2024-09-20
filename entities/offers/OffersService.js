@@ -197,6 +197,14 @@ const OffersService = {
   
     return groupedOffers;
   },
+
+  getMinifiedOffers: async () => {
+    const offers = await Offer.findAll({});
+    return offers.map((offer) => {
+      return {
+        id: offer.dataValues.id,
+      }});
+  },
   
   assignEmployees: async (employee, offerId, data, authToken) => {
     const employeesToAssign = [];
