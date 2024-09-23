@@ -35,8 +35,16 @@ const OffersController = {
         return ResponseHelper.getResponse(res, OffersService.assignTechnician, [res.locals.employee, req.params.offerId, req.body, req.headers['authorization']]);
     },
 
+    assignOwner: async (req, res) => {
+        return ResponseHelper.getResponse(res, OffersService.assignOwner, [res.locals.employee, req.params.offerId, req.body, req.headers['authorization']]);
+    },
+
     assignEmployee: async (req, res) => {
         return ResponseHelper.getResponse(res, OffersService.assignEmployee, [res.locals.employee, req.params.offerId, req.body, req.headers['authorization']]);
+    },
+
+    acceptOpportunity: async (req, res) => {
+        return ResponseHelper.getResponse(res, OffersService.acceptOpportunity, [res.locals.employee, req.params.offerId, req.body]);
     },
 
     markOfferAsLost: async (req, res) => {

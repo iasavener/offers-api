@@ -1,9 +1,15 @@
 const { Offer, OfferStage, Client, OfferLossReason, Employee, OfferEmployee } = require('../../helpers/sql/associations');
 const paginate = require("../../helpers/sql/paginate");
 const { Op } = require("sequelize");
+const AppError = require('../../helpers/AppError');
 
 const OPPORTUNITY_STAGE = 1;
-const LOST_STAGE = 4;
+const OFFER_STAGE = 2;
+const OFFER_SENT_STAGE = 3;
+const OFFER_WON_STAGE = 4;
+const ODER_RECEIVED_STAGE = 5;
+const OFFER_IN_REVISION = 6;
+const LOST_STAGE = 7;
 
 const OffersService = {
 
@@ -57,7 +63,18 @@ const OffersService = {
     return {}
   },
 
+  acceptOpportunity: async (employee, offerId, data) => {
+    // if (!employee.offers_director) throw new AppError(403, 'No tienes permisos suficientes para realizar esta acción')
+  
+    await Offer.update(
+      {updated_by: employee.id, stage_id: OFFER_STAGE},
+      {where: {id: offerId}}
+    );
+    return {}
+  },
+
   markOfferAsLost: async (employee, offerId, data) => {
+    // TODO: DESACTIVAR EMPLEADOS
     await Offer.update(
       {...data, updated_by: employee.id, stage_id: LOST_STAGE},
       {where: {id: offerId}}
@@ -80,6 +97,17 @@ const OffersService = {
     );
     if (!await OfferEmployee.findOne({where: {offer_id: offerId, employee_id: data.technician_id}})){
       await OfferEmployee.create({offer_id: offerId, employee_id: data.technician_id, created_by: employee.id, updated_by: employee.id});
+    }
+    return {}
+  },
+
+  assignOwner: async (employee, offerId, data) => {
+    await Offer.update(
+      {...data, updated_by: employee.id},
+      {where: {id: offerId}}
+    );
+    if (!await OfferEmployee.findOne({where: {offer_id: offerId, employee_id: data.owner_id}})){
+      await OfferEmployee.create({offer_id: offerId, employee_id: data.owner_id, created_by: employee.id, updated_by: employee.id});
     }
     return {}
   },
@@ -122,7 +150,7 @@ const OffersService = {
       limit: limit,
       offset: offset,
       include: includeConditions,
-      attributes: ['original_id', 'original_description', 'client_id', 'created_at', 'deleted']
+      attributes: ['original_id', 'original_description', 'client_id', 'created_at', 'deleted', 'stage_id']
     });
 
     const baseUrl = 'http://localhost:9091/uploads/'
@@ -133,6 +161,7 @@ const OffersService = {
       } else {
         opportunity.client.logo = null;
       }
+      
     })
 
     return paginatedResult;
@@ -167,6 +196,11 @@ const OffersService = {
         {
           model: Employee,
           as: 'technician',
+          attributes: ['id', 'name', 'last_name', 'acronym','profile_image']
+        },
+        {
+          model: Employee,
+          as: 'owner',
           attributes: ['id', 'name', 'last_name', 'acronym','profile_image']
         },
         {
@@ -220,6 +254,10 @@ const OffersService = {
 
       if (offer.technician?.profile_image) {
         offer.technician.profile_image = `${baseUrl}${offer.technician.profile_image}`;
+      }
+
+      if (offer.owner?.profile_image) {
+        offer.owner.profile_image = `${baseUrl}${offer.owner.profile_image}`;
       }
       acc[stageId].items.push(offer);
   
@@ -275,12 +313,6 @@ const OffersService = {
 
 
   disableEmployee: async (employee, offerId, employeeIdToDisable, authToken) => {
-    console.log(offerId)
-    console.log(employeeIdToDisable)
-    
-    console.log(typeof offerId)
-    console.log(employeeIdToDisable)
-
     await OfferEmployee.update({
         active: false,
         updated_by: employee.id

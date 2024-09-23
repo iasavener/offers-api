@@ -45,6 +45,12 @@ router.post("/opportunities",
     await OffersController.createOpportunity(req, res)
 });
 
+router.post("/offers/:offerId/accept",
+  AuthMiddleware,
+  async (req, res)=> {
+    await OffersController.acceptOpportunity(req, res)
+});
+
 router.post("/offers/:offerId/lost",
   AuthMiddleware,
   async (req, res)=> {
@@ -55,6 +61,12 @@ router.post("/offers/:offerId/technician",
   AuthMiddleware,
   async (req, res)=> {
     await OffersController.assignTechnician(req, res)
+});
+
+router.post("/offers/:offerId/owner",
+  AuthMiddleware,
+  async (req, res)=> {
+    await OffersController.assignOwner(req, res)
 });
 
 router.post("/offers/:offerId/employees",
