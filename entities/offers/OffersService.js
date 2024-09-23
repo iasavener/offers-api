@@ -1,5 +1,6 @@
 const { Offer, OfferStage, Client, OfferLossReason, Employee, OfferEmployee } = require('../../helpers/sql/associations');
 const paginate = require("../../helpers/sql/paginate");
+const { Op } = require("sequelize");
 
 const OPPORTUNITY_STAGE = 1;
 const LOST_STAGE = 4;
@@ -15,7 +16,35 @@ const OffersService = {
   },
 
   createOpportunity: async (employee, data) => {
-    await Offer.create({...data, original_id: data.id, original_description: data.description, stage_id: OPPORTUNITY_STAGE, created_by: employee.id, updated_by: employee.id});
+    const currentYear = new Date().getFullYear().toString().slice(-2);
+
+    const lastOffer = await Offer.findOne({
+      where: {
+        original_id: {
+          [Op.like]: `${currentYear}P%`,
+        },
+      },
+      order: [
+        ['createdAt', 'DESC']
+      ]
+    });
+   
+    let nextNumber = '001';
+   
+    if (lastOffer) {
+    
+      const lastId = lastOffer.original_id;
+      const match = lastId.match(/\d{3}$/);
+   
+      if (match) {
+        const lastNumber = parseInt(match[0], 10);
+        nextNumber = (lastNumber + 1).toString().padStart(3, '0');
+      }
+    }
+   
+    const newOriginalId = `${currentYear}P${nextNumber}`; 
+
+    await Offer.create({...data,id: newOriginalId,  original_id: newOriginalId, original_description: data.description, stage_id: OPPORTUNITY_STAGE, created_by: employee.id, updated_by: employee.id});
     // TODO: METER A LOS EMPLEADOS POR DEFECTO ¿CÚALES?
     return {}
   },
@@ -56,7 +85,7 @@ const OffersService = {
   },
 
   getOpportunities: async (employee, query) => {
-    const { page, page_size: pageSize, client_id: clientId } = query;
+    const { page, page_size: pageSize, client_id: clientId, stage } = query;
 
     const currentPage = parseInt(page, 10) || 1;
     const limit = parseInt(pageSize, 10) || 10;
@@ -68,11 +97,23 @@ const OffersService = {
       ...(clientId && { client_id: clientId }),
     };
 
+    if (stage === 'true') {
+      whereConditions.deleted = true;
+    } else if (stage) {
+      whereConditions.deleted = false;
+      whereConditions.stage_id = stage;
+    }
+
     const includeConditions = [
       {
         model: Client,
         as: "client",
         attributes: ["name", "logo"]
+      },
+      {
+        model: OfferStage,
+        as: "stage",
+        attributes: ["id", "name"]
       },
     ];
   
