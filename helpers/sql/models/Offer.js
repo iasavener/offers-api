@@ -82,9 +82,6 @@ module.exports = (sequelize) => {
     },
     competitor: {
       type: DataTypes.TEXT
-    },
-    owner_id: {
-      type: DataTypes.INTEGER
     }
   }, {
     sequelize,
